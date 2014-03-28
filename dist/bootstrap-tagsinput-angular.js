@@ -16,7 +16,8 @@ angular.module('bootstrap-tagsinput', [])
   return {
     restrict: 'EA',
     scope: {
-      model: '=ngModel'
+      model: '=ngModel',
+      change: '&ngChange'
     },
     template: '<select multiple></select>',
     replace: false,
@@ -41,14 +42,18 @@ angular.module('bootstrap-tagsinput', [])
         }
 
         select.on('itemAdded', function(event) {
-          if (scope.model.indexOf(event.item) === -1)
+          if (scope.model.indexOf(event.item) === -1) {
             scope.model.push(event.item);
+            scope.change()
+          }
         });
 
         select.on('itemRemoved', function(event) {
           var idx = scope.model.indexOf(event.item);
-          if (idx !== -1)
+          if (idx !== -1) {
             scope.model.splice(idx, 1);
+            scope.change()
+          }
         });
 
         // create a shallow copy of model's current state, needed to determine
